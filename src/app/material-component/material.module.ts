@@ -9,6 +9,7 @@ import { CdkTableModule } from '@angular/cdk/table';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import {DragDropModule} from '@angular/cdk/drag-drop'
 
 import { MaterialRoutes } from './material.routing';
 import { ButtonsComponent } from './buttons/buttons.component';
@@ -43,7 +44,8 @@ import { SlideToggleComponent } from './slide-toggle/slide-toggle.component';
     FormsModule,
     ReactiveFormsModule,
     FlexLayoutModule,
-    CdkTableModule
+    CdkTableModule,
+    DragDropModule
   ],
   providers: [],
   entryComponents: [DialogOverviewExampleDialogComponent],

@@ -3,6 +3,30 @@
 		<mat-card-title>Custom question builder</mat-card-title>
 		<mat-card-subtitle>Build your custom question </mat-card-subtitle>
 
+		<div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+
+			<div class="c-question-droplist-box" *ngFor="let question of questions" cdkDrag>
+				<div class="c-question-droplist--column">
+					<span><strong>ID: {{question.id}}</strong> {{question.text}}</span>
+				</div>
+				<div class="c-question-droplist--column c-question-droplist--column-menu-wrap">
+
+					<button mat-icon-button [matMenuTriggerFor]="menu4">
+						<mat-icon>more_vert</mat-icon>
+					</button>
+					<mat-menu #menu4="matMenu">
+						<button mat-menu-item>
+							<mat-icon>edit</mat-icon>
+							<span>Edit question</span>
+						</button>
+						<button mat-menu-item>
+							<mat-icon>playlist_add</mat-icon>
+							<span>Add linked question</span>
+						</button>
+					</mat-menu>
+				</div>
+			</div>
+		</div>
 
 	</mat-card-content>
 </mat-card>
@@ -10,7 +34,23 @@
 <mat-card>
 	<mat-card-content>
 		<mat-card-title>Test custom questions</mat-card-title>
-
+		<button mat-icon-button [matMenuTriggerFor]="menu4">
+			<mat-icon>more_vert</mat-icon>
+		</button>
+		<mat-menu #menu4="matMenu">
+			<button mat-menu-item>
+				<mat-icon>dialpad</mat-icon>
+				<span>Redial</span>
+			</button>
+			<button mat-menu-item disabled>
+				<mat-icon>voicemail</mat-icon>
+				<span>Check voicemail</span>
+			</button>
+			<button mat-menu-item>
+				<mat-icon>notifications_off</mat-icon>
+				<span>Disable alerts</span>
+			</button>
+		</mat-menu>
 
 	</mat-card-content>
 </mat-card>
