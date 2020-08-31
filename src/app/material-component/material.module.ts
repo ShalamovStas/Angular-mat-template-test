@@ -14,7 +14,7 @@ import {DragDropModule} from '@angular/cdk/drag-drop'
 import { MaterialRoutes } from './material.routing';
 import { ButtonsComponent } from './buttons/buttons.component';
 
-import { CustomQuestionsComponent } from './custom-questions/custom-questions.component';
+import { CustomQuestionsComponent,DialogEditPolicyComponent  } from './custom-questions/custom-questions.component';
 
 import { GridComponent } from './grid/grid.component';
 import { ListsComponent } from './lists/lists.component';
@@ -34,9 +34,11 @@ import { TooltipComponent } from './tooltip/tooltip.component';
 import { SnackbarComponent } from './snackbar/snackbar.component';
 import { SliderComponent } from './slider/slider.component';
 import { SlideToggleComponent } from './slide-toggle/slide-toggle.component';
-
+import { MatFormFieldModule, MatInputModule } from '@angular/material';
 @NgModule({
   imports: [
+    MatFormFieldModule,
+     MatInputModule,
     CommonModule,
     RouterModule.forChild(MaterialRoutes),
     DemoMaterialModule,
@@ -48,9 +50,10 @@ import { SlideToggleComponent } from './slide-toggle/slide-toggle.component';
     DragDropModule
   ],
   providers: [],
-  entryComponents: [DialogOverviewExampleDialogComponent],
+  entryComponents: [DialogOverviewExampleDialogComponent, DialogEditPolicyComponent],
   declarations: [
     CustomQuestionsComponent,
+    DialogEditPolicyComponent,
     ButtonsComponent,
     GridComponent,
     ListsComponent,

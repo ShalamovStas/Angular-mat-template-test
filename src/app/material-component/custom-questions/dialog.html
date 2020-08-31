@@ -1,0 +1,19 @@
+<h1 mat-dialog-title>Question strategy</h1>
+<div mat-dialog-content>
+  <p>The parent question answer is TRUE</p>
+
+    <label class="example-margin">Choose the behaviour:</label>
+    <mat-radio-group class="d-flex flex-direction--column"
+    [(ngModel)]="data.trueFalseStrategy">
+    <mat-radio-button class="example-margin" color="primary" value="1">
+      Skip if parent answer is true
+    </mat-radio-button>
+    <mat-radio-button class="example-margin" color="accent" value="2">
+      Show if parent answer is true
+    </mat-radio-button>
+  </mat-radio-group>
+
+</div>
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+</div>

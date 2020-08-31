@@ -5,8 +5,8 @@
 }
 
 .example-list {
-  width: 50%;
-  max-width: 50%;
+  width: 100%;
+  max-width: 100%;
   border: solid 1px #ccc;
   min-height: 60px;
   display: block;
@@ -15,13 +15,13 @@
   overflow: hidden;
 }
 
-.c-question-droplist-box {
-  padding: 20px 10px;
+.c-question-droplist-flex {
+  padding: 10px 5px;
   border-bottom: solid 1px #ccc;
   color: rgba(0, 0, 0, 0.87);
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   box-sizing: border-box;
   cursor: move;
@@ -37,12 +37,39 @@
   justify-content: end;
 }
 
+.question-text--wrab {
+  margin: 0.5rem;
+  padding: 1rem;
+  border-radius: 0.2rem;
+  background-color: #ddd;
+
+  &.parent{
+    background-color: #ffffff;
+  }
+
+  &.child{
+    background-color: #e8f9ff;
+    margin-left: 2rem;
+  }
+
+}
+
+.example-margin {
+  margin: 10px;
+}
+
+
+
 .cdk-drag-preview {
   box-sizing: border-box;
   border-radius: 4px;
   box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
               0 8px 10px 1px rgba(0, 0, 0, 0.14),
               0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.question-attributes--wrap{
+  margin: 0.5rem;
 }
 
 .cdk-drag-placeholder {
@@ -61,4 +88,23 @@
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
+.position-relative {
+	position: relative;
+}
+
+.add-contact {
+	position: absolute;
+    right: 17px;
+    top: 57px;
+}
+
+/* Animate items as they're being sorted. */
+.cdk-drop-list-dragging .cdk-drag {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+/* Animate an item that has been dropped. */
+.cdk-drag-animating {
+  transition: transform 300ms cubic-bezier(0, 0, 0.2, 1);
+}
 
