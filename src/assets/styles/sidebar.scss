@@ -10,29 +10,29 @@ Main sidebar
 ******************/
 
 mat-sidenav {
-  width: 240px;
-  padding-top: 0px;
+    width: 240px;
+    padding-top: 0px;
 }
-#snav{
+#snav {
     box-shadow: 1px 0px 20px rgba(0, 0, 0, 0.08);
     .mat-list-item {
         height: auto;
-        &:hover{
+        &:hover {
             background: none;
         }
-        
-        .mat-list-item-content{
+
+        .mat-list-item-content {
             display: block;
-            padding: 0px 15px;
-            &:hover{
+            padding: 0px 0px;
+            &:hover {
                 background: none;
-                > a{
-                  color:$themecolor;
+                > a {
+                    color: $themecolor;
                 }
             }
         }
-        
-        a{
+
+        a {
             height: 45px;
             padding: 0 10px;
             margin-bottom: 10px;
@@ -40,14 +40,14 @@ mat-sidenav {
             display: flex;
             font-size: 15px;
             white-space: nowrap;
-            color:$sidebar-text;
-            mat-icon:not(.dd-icon){
+            color: $sidebar-text;
+            mat-icon:not(.dd-icon) {
                 margin-right: 8px;
             }
-            mat-icon{
-                color:$sidebar-icons;
+            mat-icon {
+                color: $sidebar-icons;
             }
-            .dd-icon{
+            .dd-icon {
                 font-size: 16px;
                 width: 16px;
                 transition: 0.2s ease-in;
@@ -55,35 +55,57 @@ mat-sidenav {
                 height: 16px;
             }
         }
-        &.selected > .mat-list-item-content > a{
+        &.selected > .mat-list-item-content > a {
             background: $themecolor-alt;
-            border-radius: $radius;
-            color:$white;
-            
-            mat-icon{
-                color:$white;
+            // border-radius: $radius;
+            color: $white;
+
+            mat-icon {
+                color: $white;
             }
-            .dd-icon{
+            .dd-icon {
                 -webkit-transform: rotate(-180deg);
                 transform: rotate(-180deg);
             }
-            
         }
-        &.selected .sub-item .mat-list-item-content a.selected{
+        &.selected .sub-item .mat-list-item-content a.selected {
             background: transparent;
-            color:$inverse;
-            font-weight: 500;               
+            color: $inverse;
+            font-weight: 500;
         }
     }
 }
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background-color: #ebf2f6;
+    border-radius: 20px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background-color: #9eb3b9;
+    border-radius: 20px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background-color: #717677;
+}
+
+
 /*******************
 use profile section
 ******************/
 
-.user-profile {  
+.user-profile {
     position: relative;
-    background-size:cover;
-    
+    background-size: cover;
+
     .profile-img {
         width: 50px;
         margin-left: 30px;
@@ -93,7 +115,7 @@ use profile section
             -webkit-animation: 2.5s blow 0s linear infinite;
             animation: 2.5s blow 0s linear infinite;
             position: absolute;
-            content: '';
+            content: "";
             width: 50px;
             height: 50px;
             top: 31px;
@@ -152,25 +174,23 @@ use profile section
         cursor: pointer;
         white-space: nowrap;
         > a {
-            color: $white!important;
+            color: $white !important;
             width: 100%;
             padding: 6px 30px;
             background: rgba(0, 0, 0, 0.5);
             display: block;
             white-space: nowrap;
-            &:after{
+            &:after {
                 position: absolute;
                 right: 20px;
-                top:20px;
+                top: 20px;
             }
         }
     }
-    
 }
 
-
-.sidebar-closed #snav{
+.sidebar-closed #snav {
     &.mat-sidenav ~ .mat-drawer-content {
-          margin-left: 0px!important;
-        }
+        margin-left: 0px !important;
+    }
 }
