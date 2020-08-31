@@ -1,15 +1,15 @@
 <h1 mat-dialog-title>Question strategy</h1>
 <div mat-dialog-content>
-  <p>The parent question answer is TRUE</p>
+  <p class="text-info"><strong>The previous answer is TRUE</strong></p>
 
-    <label class="example-margin">Choose the behaviour:</label>
-    <mat-radio-group class="d-flex flex-direction--column"
+    <label class="example-margin text-info m-10">Next question should be:</label>
+    <mat-radio-group class="d-flex flex-direction--column m-b-30"
     [(ngModel)]="data.trueFalseStrategy">
     <mat-radio-button class="example-margin" color="primary" value="1">
-      Skip if parent answer is true
+      Skipped
     </mat-radio-button>
     <mat-radio-button class="example-margin" color="accent" value="2">
-      Show if parent answer is true
+      Shown
     </mat-radio-button>
   </mat-radio-group>
 

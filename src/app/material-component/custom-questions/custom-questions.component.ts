@@ -1,12 +1,15 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { EditQuestionViewModel, Question, QuestionType } from "./questionModels";
+import { EditQuestionViewModel, Question, QuestionType, TestResultModel } from "./questionModels";
 import { trigger, state, transition, animate, style } from '@angular/animations';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { DialogAddQuestionComponent } from './dialogs/dialog-add-question'
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material';
+
 
 @Component({
   selector: 'app-dialog-overview-example-dialog',
-  templateUrl: './dialog.html'
+  templateUrl: './edit-policy-dialog.html'
 })
 export class DialogEditPolicyComponent {
   constructor(
@@ -30,47 +33,48 @@ export class CustomQuestionsComponent implements OnInit {
   public editQuestionViewModel: EditQuestionViewModel = new EditQuestionViewModel();
   public questions: Array<Question> = new Array<Question>();
   isOpen = false;
+  public testResultModels : Array<TestResultModel> = new Array <TestResultModel>()
 
-
-  // public questions = [
-  //   { id: 1, text: 'Episode I - The Phantom Menace' },
-  //   { id: 2, text: 'Episode II - Attack of the Clones' },
-  //   { id: 3, text: 'Episode III - Revenge of the Sith' },
-  //   { id: 4, text: 'Episode IV - A New Hope' },
-  //   { id: 5, text: 'Episode V - The Empire Strikes Back' },
-  //   { id: 6, text: 'Episode VI - Return of the Jedi' },
-  //   { id: 7, text: 'Episode VII - The Force Awakens' },
-  //   { id: 8, text: 'Episode VIII - The Last Jedi' },
-  //   { id: 9, text: 'Episode IX – The Rise of Skywalker' },
-  //   { id: 10, text: 'Last- the end' }
-  // ];
-
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog, public snackBar: MatSnackBar) { }
   ngOnInit(): void {
 
-    let querstion_1 = new Question(this.newGuid(), 'Episode I - The Phantom Menace');
-    querstion_1.questionType = QuestionType.TRUE_FALSE_QUESTION;
-    this.questions.push(querstion_1);
+    let question_1 = new Question();
+    question_1.id = this.newGuid();
+    question_1.text = 'Episode I - The Phantom Menace';
+    question_1.questionType = QuestionType.TRUE_FALSE_QUESTION;
+    this.questions.push(question_1);
 
-    let querstion_2 = new Question(this.newGuid(), 'Episode II - Attack of the Clones');
-    querstion_2.questionType = QuestionType.INPUT_QUESTION;
-    this.questions.push(querstion_2);
+    let question_2 = new Question();
+    question_2.id = this.newGuid();
+    question_2.text = 'Episode II - Attack of the Clones';
+    question_2.questionType = QuestionType.INPUT_QUESTION;
+    this.questions.push(question_2);
 
-    let querstion_3 = new Question(this.newGuid(), 'Episode III - Revenge of the Sith');
-    querstion_3.questionType = QuestionType.TRUE_FALSE_QUESTION;
-    this.questions.push(querstion_3);
+    let question_3 = new Question();
+    question_3.id = this.newGuid()
+    question_3.text = 'Episode III - Revenge of the Sith';
+    question_3.questionType = QuestionType.TRUE_FALSE_QUESTION;
+    this.questions.push(question_3);
 
-    let querstion_4 = new Question(this.newGuid(), 'Question parent');
-    querstion_4.questionType = QuestionType.TRUE_FALSE_QUESTION;
-    this.questions.push(querstion_4);
+    let question_4 = new Question();
+    question_4.id = this.newGuid();
+    question_4.text = 'Within the last 14 days, have you come in contact with a person with a confirmed or suspected case of a newly identified viral illness?';
+    question_4.questionType = QuestionType.TRUE_FALSE_QUESTION;
+    this.questions.push(question_4);
 
-    let child_question = new Question(this.newGuid(), 'Question child');
+    let child_question = new Question();
+    child_question.id = this.newGuid();
+    child_question.text = 'Did you wear protective equipment?';
     child_question.questionType = QuestionType.TRUE_FALSE_QUESTION;
-    querstion_4.childQuestion = child_question;
+    question_4.childQuestion = child_question;
 
-    let querstion_6 = new Question(this.newGuid(), 'Episode IV - A New Hope');
-    querstion_6.questionType = QuestionType.TRUE_FALSE_QUESTION;
-    this.questions.push(querstion_6);
+    let defaultResult = new TestResultModel();
+    defaultResult.id = this.newGuid();
+    defaultResult.message = 'Test passed!';
+    defaultResult.points = 10;
+
+    this.testResultModels.push(defaultResult)
+
   }
 
   drop(event: CdkDragDrop<string[]>) {
@@ -81,10 +85,7 @@ export class CustomQuestionsComponent implements OnInit {
   }
 
   editCard(id: any) {
-    this.isOpen = !this.isOpen;
-    this.editQuestionViewModel.editQuestionMode = true;
     let currentQuestion = this.questions.find(x => { return x.id === id });
-
     if (!currentQuestion) {
       console.error("question not found")
       this.editQuestionViewModel.editQuestionMode = false;
@@ -92,44 +93,116 @@ export class CustomQuestionsComponent implements OnInit {
       return;
     }
 
-    let parentQuestion = new Question(currentQuestion?.id, currentQuestion?.text)
-    let childQuestion = new Question(currentQuestion?.childQuestion?.id, currentQuestion?.childQuestion?.text)
-    parentQuestion.childQuestion = childQuestion;
+    let parentQuestion = new Question()
+    parentQuestion.id = currentQuestion.id;
+    parentQuestion.text = currentQuestion.text;
+    parentQuestion.childQuestion = currentQuestion.childQuestion;
+
 
     parentQuestion.questionType = (currentQuestion ? currentQuestion?.questionType : QuestionType.UNDEFINED) + '';
-    childQuestion.questionType = (currentQuestion?.childQuestion ? currentQuestion?.childQuestion?.questionType : QuestionType.UNDEFINED) + '';
 
     parentQuestion.pointsPositive = currentQuestion?.pointsPositive
     parentQuestion.pointsNegative = currentQuestion?.pointsNegative
 
-    parentQuestion.childQuestion.pointsPositive = currentQuestion?.childQuestion?.pointsPositive
-    parentQuestion.childQuestion.pointsNegative = currentQuestion?.childQuestion?.pointsNegative
+    console.log(parentQuestion)
+    const dialogNewQuestion = this.dialog.open(DialogAddQuestionComponent, {
+      width: '500px',
+      data: parentQuestion
+    });
 
-    this.editQuestionViewModel.currentQuestion = parentQuestion;
+    dialogNewQuestion.afterClosed().subscribe(editedQuestion => {
+      console.log(editedQuestion);
+      if (!editedQuestion)
+        return;
 
+      this.saveQuestion(editedQuestion);
+      this.openSnackBar('Saved', 'Ok')
+    });
   }
 
-  saveQuestion() {
-    console.log(this.editQuestionViewModel.currentQuestion?.questionType);
+  addChildQuestion(id: any) {
+    let currentQuestion = this.questions.find(x => { return x.id === id });
+    if (!currentQuestion) {
+      console.error("question not found")
+      this.editQuestionViewModel.editQuestionMode = false;
+      this.editQuestionViewModel.currentQuestion = undefined;
+      return;
+    }
+
+    let newQuestion = new Question();
+    newQuestion.questionType = '1';
+    const dialogNewQuestion = this.dialog.open(DialogAddQuestionComponent, {
+      width: '500px',
+      data: newQuestion
+    });
+
+    dialogNewQuestion.afterClosed().subscribe(newQuestion => {
+      if (!newQuestion)
+        return;
+
+      if (currentQuestion)
+        currentQuestion.childQuestion = newQuestion;
+
+      this.openSnackBar('Child question added', 'Ok')
+    });
+  }
+
+  editChildQuestion(id: any){
+    let currentQuestion = this.questions.find(x => { return x.id === id });
+    if (!currentQuestion) {
+      console.error("question not found")
+      this.editQuestionViewModel.editQuestionMode = false;
+      this.editQuestionViewModel.currentQuestion = undefined;
+      return;
+    }
+
+    let newQuestion = new Question();
+    newQuestion.questionType = currentQuestion.childQuestion?.questionType + '';
+    newQuestion.pointsNegative = currentQuestion.childQuestion?.pointsNegative;
+    newQuestion.pointsPositive = currentQuestion.childQuestion?.pointsPositive;
+    newQuestion.text = currentQuestion.childQuestion?.text;
+
+    const dialogNewQuestion = this.dialog.open(DialogAddQuestionComponent, {
+      width: '500px',
+      data: newQuestion
+    });
+
+    dialogNewQuestion.afterClosed().subscribe(newQuestion => {
+      if (!newQuestion)
+        return;
+
+      if (currentQuestion)
+        currentQuestion.childQuestion = newQuestion;
+
+      this.openSnackBar('Child updated', 'Ok')
+    });
+  }
+
+  saveQuestion(question: Question | undefined) {
+    if (!question)
+      return;
+
     for (let index = 0; index < this.questions.length; index++) {
-      if (this.questions[index].id === this.editQuestionViewModel.currentQuestion?.id) {
-        this.editQuestionByIndex(index);
+      if (this.questions[index].id === question.id) {
+        this.editQuestionByIndex(index, question);
         break;
       }
     }
     this.onCloseEdit();
   }
 
-  editQuestionByIndex(index: number) {
-    this.questions[index].text = this.editQuestionViewModel.currentQuestion?.text as string;
-    this.questions[index].questionType = this.editQuestionViewModel.currentQuestion?.questionType;
-    this.questions[index].pointsPositive = this.editQuestionViewModel.currentQuestion?.pointsPositive;
-    this.questions[index].pointsNegative = this.editQuestionViewModel.currentQuestion?.pointsNegative;
 
-    if (this.editQuestionViewModel.currentQuestion?.childQuestion) {
-      this.questions[index].childQuestion = this.editQuestionViewModel.currentQuestion?.childQuestion;
+
+  editQuestionByIndex(index: number, question: Question) {
+    this.questions[index].text = question.text as string;
+    this.questions[index].questionType = question.questionType;
+    this.questions[index].pointsPositive = question.pointsPositive;
+    this.questions[index].pointsNegative = question.pointsNegative;
+
+    if (question.childQuestion) {
+      this.questions[index].childQuestion = question.childQuestion;
     }
-    if (!this.editQuestionViewModel.currentQuestion?.childQuestion?.text || this.editQuestionViewModel.currentQuestion?.childQuestion?.text === '')
+    if (!question.childQuestion?.text || question.childQuestion?.text === '')
       this.questions[index].childQuestion = undefined;
   }
 
@@ -159,24 +232,40 @@ export class CustomQuestionsComponent implements OnInit {
     this.questions = this.questions.filter(function (value, index, arr) { return value.id !== id; })
   }
 
-  addQuestion() {
-    this.editQuestionViewModel.editQuestionMode = false;
-    this.editQuestionViewModel.addQuestionMode = true;
-    this.editQuestionViewModel.currentQuestion = new Question(this.newGuid(), '');
+  AddNewQuestionDialog() {
+    let newQuestion = new Question();
+    newQuestion.questionType = '1';
+    const dialogNewQuestion = this.dialog.open(DialogAddQuestionComponent, {
+      width: '500px',
+      data: newQuestion
+    });
+
+    dialogNewQuestion.afterClosed().subscribe(newQuestion => {
+      console.log('The dialog was closed');
+      console.log(newQuestion);
+      if (!newQuestion)
+        return;
+
+      this.saveNewQuestion(newQuestion);
+
+      this.openSnackBar('New message added', 'Ok')
+    });
 
   }
 
-  saveNewQuestion() {
-    console.log(this.editQuestionViewModel.currentQuestion?.questionType)
-    if (this.editQuestionViewModel.currentQuestion?.questionType == QuestionType.TRUE_FALSE_QUESTION)
-      console.log("True false question")
+  openSnackBar(message: string, action: string) {
+    let config = new MatSnackBarConfig();
+    config.panelClass = ['snack-bar'];
 
-    let newQuestion = new Question(this.editQuestionViewModel.currentQuestion?.id, this.editQuestionViewModel.currentQuestion?.text)
-    newQuestion.questionType = this.editQuestionViewModel.currentQuestion ? this.editQuestionViewModel.currentQuestion.questionType : QuestionType.UNDEFINED;
+    this.snackBar.open(message, action, {
+      duration: 5000,
+      panelClass: ['snack-bar']
+    });
+  }
 
+  saveNewQuestion(newQuestion: Question) {
+    newQuestion.id = this.newGuid();
     this.questions.push(newQuestion as any);
-    this.editQuestionViewModel.addQuestionMode = false;
-    this.editQuestionViewModel.currentQuestion = undefined;
   }
 
   openDialog(id: any): void {
@@ -202,6 +291,13 @@ export class CustomQuestionsComponent implements OnInit {
         console.log(question.childQuestion.questionTrueFalseStrategy)
       }
     });
+  }
+
+
+  // Results
+
+  addResult(){
+    
   }
 
   newGuid() {
