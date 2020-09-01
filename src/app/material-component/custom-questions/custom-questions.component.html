@@ -247,7 +247,7 @@
 						<div class="d-flex flex-wrap">
 							<div>
 							</div>
-							<div cdkDropList class="example-list">
+							<div cdkDropList class="example-list" (cdkDropListDropped)="dropTestResult($event)">
 
 								<div class="c-question-droplist-flex" *ngFor="let testResultModel of testResultModels"
 									cdkDrag>
@@ -272,7 +272,7 @@
 												<mat-icon>edit</mat-icon>
 												<span>Edit</span>
 											</button>
-											<button mat-menu-item (click)="deleteTestResultModel(question.id)">
+											<button mat-menu-item (click)="deleteTestResultModel(testResultModel.id)">
 												<mat-icon>delete_sweep</mat-icon>
 												<span>Delete</span>
 											</button>
@@ -288,6 +288,15 @@
 		</div>
 	</mat-card-content>
 </mat-card>
+
+<div style="display: flex; place-content: center;"  >
+	<mat-card fxFlex.gt-lg="50" fxFlex.gt-md="50" fxFlex.gt-xs="100" fxFlex="100" >
+		<mat-card-content>
+			<mat-card-title>Quiz</mat-card-title>
+
+		</mat-card-content>
+	</mat-card>
+</div>
 
 <mat-card>
 	<mat-card-content>

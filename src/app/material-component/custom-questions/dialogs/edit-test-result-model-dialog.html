@@ -1,0 +1,18 @@
+<h1 mat-dialog-title>Add new result</h1>
+<div mat-dialog-content>
+
+  <mat-card-content>
+    <mat-form-field>
+      <input matInput [(ngModel)]="data.points"
+        type="number" autocomplete="off" placeholder="Points">
+    </mat-form-field>
+    
+    <mat-form-field>
+      <textarea matInput [(ngModel)]="data.message" placeholder="Message"></textarea>
+    </mat-form-field>
+  </mat-card-content>
+
+</div>
+<div mat-dialog-actions style="justify-content: flex-end;">
+  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Save</button>
+</div>

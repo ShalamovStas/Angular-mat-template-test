@@ -4,6 +4,7 @@ import { EditQuestionViewModel, Question, QuestionType, TestResultModel } from "
 import { trigger, state, transition, animate, style } from '@angular/animations';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DialogAddQuestionComponent } from './dialogs/dialog-add-question'
+import { DialogEditTestResultModelComponent } from './dialogs/edit-test-result-model-dialog'
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material';
 
 
@@ -33,7 +34,7 @@ export class CustomQuestionsComponent implements OnInit {
   public editQuestionViewModel: EditQuestionViewModel = new EditQuestionViewModel();
   public questions: Array<Question> = new Array<Question>();
   isOpen = false;
-  public testResultModels : Array<TestResultModel> = new Array <TestResultModel>()
+  public testResultModels: Array<TestResultModel> = new Array<TestResultModel>()
 
   constructor(public dialog: MatDialog, public snackBar: MatSnackBar) { }
   ngOnInit(): void {
@@ -82,6 +83,10 @@ export class CustomQuestionsComponent implements OnInit {
     let currentQuestion = this.questions[event.previousIndex];
 
     moveItemInArray(this.questions, event.previousIndex, event.currentIndex);
+  }
+
+  dropTestResult(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.testResultModels, event.previousIndex, event.currentIndex);
   }
 
   editCard(id: any) {
@@ -147,7 +152,7 @@ export class CustomQuestionsComponent implements OnInit {
     });
   }
 
-  editChildQuestion(id: any){
+  editChildQuestion(id: any) {
     let currentQuestion = this.questions.find(x => { return x.id === id });
     if (!currentQuestion) {
       console.error("question not found")
@@ -214,21 +219,6 @@ export class CustomQuestionsComponent implements OnInit {
   }
 
   deleteQuestion(id: any) {
-
-    // for (let index = 0; index < this.questions.length; index ++) {
-    //   if (this.questions[index].id === id) {
-    //     let basQuestions = this.questions;
-    //     console.log(basQuestions)
-    //     console.log(this.questions[index])
-    //     let removed = basQuestions.slice(index, 1);
-    //     console.log(basQuestions)
-
-    //     this.questions = basQuestions;
-
-    //      break;
-    //   }
-    // }
-
     this.questions = this.questions.filter(function (value, index, arr) { return value.id !== id; })
   }
 
@@ -296,8 +286,51 @@ export class CustomQuestionsComponent implements OnInit {
 
   // Results
 
-  addResult(){
-    
+  addResult() {
+    let newTestResult = new TestResultModel();
+    newTestResult.id = this.newGuid();
+
+    const dialogRef = this.dialog.open(DialogEditTestResultModelComponent, {
+      width: '350px',
+      data: newTestResult
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result)
+        return;
+
+      this.testResultModels.push(result)
+    });
+  }
+
+  editTestResultModel(id: any) {
+    let newTestResult = new TestResultModel();
+    let currentResult = this.testResultModels.find(x => { return x.id === id });
+    if (!currentResult)
+      return;
+
+    newTestResult.id = currentResult.id;
+    newTestResult.message = currentResult.message;
+    newTestResult.points = currentResult.points;
+
+    const dialogRef = this.dialog.open(DialogEditTestResultModelComponent, {
+      width: '450px',
+      data: newTestResult
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result)
+        return;
+
+        if(currentResult){
+          currentResult.message = result.message;
+          currentResult.points = result.points;
+        }
+    });
+  }
+
+  deleteTestResultModel(id: any){
+    this.testResultModels = this.testResultModels.filter(function (value, index, arr) { return value.id !== id; })
   }
 
   newGuid() {

@@ -16,6 +16,7 @@ import { ButtonsComponent } from './buttons/buttons.component';
 
 import { CustomQuestionsComponent,DialogEditPolicyComponent  } from './custom-questions/custom-questions.component';
 import { DialogAddQuestionComponent  } from './custom-questions/dialogs/dialog-add-question';
+import { DialogEditTestResultModelComponent  } from './custom-questions/dialogs/edit-test-result-model-dialog';
 
 import { GridComponent } from './grid/grid.component';
 import { ListsComponent } from './lists/lists.component';
@@ -51,11 +52,13 @@ import { MatFormFieldModule, MatInputModule } from '@angular/material';
     DragDropModule
   ],
   providers: [],
-  entryComponents: [DialogOverviewExampleDialogComponent, DialogEditPolicyComponent, DialogAddQuestionComponent],
+  entryComponents: [DialogOverviewExampleDialogComponent, DialogEditPolicyComponent, DialogAddQuestionComponent, 
+    DialogEditTestResultModelComponent],
   declarations: [
     CustomQuestionsComponent,
     DialogEditPolicyComponent,
     DialogAddQuestionComponent,
+    DialogEditTestResultModelComponent,
     ButtonsComponent,
     GridComponent,
     ListsComponent,
