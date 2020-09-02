@@ -6,6 +6,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { DialogAddQuestionComponent } from './dialogs/dialog-add-question'
 import { DialogEditTestResultModelComponent } from './dialogs/edit-test-result-model-dialog'
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material';
+import { QuestionWizardEngine } from './questionWizard';
 
 
 @Component({
@@ -35,6 +36,7 @@ export class CustomQuestionsComponent implements OnInit {
   public questions: Array<Question> = new Array<Question>();
   isOpen = false;
   public testResultModels: Array<TestResultModel> = new Array<TestResultModel>()
+  public questionWizardEngine: QuestionWizardEngine = new QuestionWizardEngine();
 
   constructor(public dialog: MatDialog, public snackBar: MatSnackBar) { }
   ngOnInit(): void {
@@ -76,6 +78,7 @@ export class CustomQuestionsComponent implements OnInit {
 
     this.testResultModels.push(defaultResult)
 
+    this.questionWizardEngine.init(this.questions, this.testResultModels);
   }
 
   drop(event: CdkDragDrop<string[]>) {
@@ -322,16 +325,34 @@ export class CustomQuestionsComponent implements OnInit {
       if (!result)
         return;
 
-        if(currentResult){
-          currentResult.message = result.message;
-          currentResult.points = result.points;
-        }
+      if (currentResult) {
+        currentResult.message = result.message;
+        currentResult.points = result.points;
+      }
     });
   }
 
-  deleteTestResultModel(id: any){
+  deleteTestResultModel(id: any) {
     this.testResultModels = this.testResultModels.filter(function (value, index, arr) { return value.id !== id; })
   }
+
+  //quiz
+
+  startQuiz() {
+    this.questionWizardEngine.setStateStart();
+    console.log(this.questions)
+  }
+
+  trueFalseAnswer(res: boolean) {
+    this.questionWizardEngine.currentQuestion.handleAnswer(res);
+    this.questionWizardEngine.next()
+  }
+
+  inputAnswer(res: string) {
+    this.questionWizardEngine.currentQuestion.handleAnswer(true, res);
+    this.questionWizardEngine.next()
+  }
+
 
   newGuid() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {

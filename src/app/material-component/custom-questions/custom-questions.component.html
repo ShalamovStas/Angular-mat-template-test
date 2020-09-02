@@ -127,112 +127,6 @@
 					</mat-card-content>
 				</mat-card>
 			</div>
-			<!-- column -->
-			<!-- Edit question column -->
-			<!-- <div *ngIf="editQuestionViewModel.editQuestionMode" fxFlex.gt-lg="50" fxFlex.gt-md="50" fxFlex.gt-xs="100"
-				fxFlex="100">
-				<mat-card>
-					<mat-card-content>
-						<mat-card-title>Question editor</mat-card-title>
-						<mat-card-subtitle>Edit question</mat-card-subtitle>
-
-					</mat-card-content>
-					<hr>
-					<mat-card-content>
-						<mat-card-subtitle>Parent question</mat-card-subtitle>
-
-						<section class="example-section">
-							<mat-radio-group class="d-flex flex-direction--column"
-								[(ngModel)]="editQuestionViewModel.currentQuestion.questionType">
-								<mat-radio-button class="example-margin" color="primary" value="1">
-									True/False question
-								</mat-radio-button>
-								<mat-radio-button class="example-margin" color="accent" value="2">
-									Input question
-								</mat-radio-button>
-							</mat-radio-group>
-						</section>
-						<mat-form-field>
-							<input matInput [(ngModel)]="editQuestionViewModel.currentQuestion.pointsPositive"
-								type="number" autocomplete="off" placeholder="Points for 'TRUE' answer">
-						</mat-form-field>
-
-						<mat-form-field>
-							<input matInput [(ngModel)]="editQuestionViewModel.currentQuestion.pointsNegative"
-								type="number" autocomplete="off" placeholder="Points for 'FALSE' answer">
-						</mat-form-field>
-
-						<mat-form-field>
-
-							<input matInput [(ngModel)]="editQuestionViewModel.currentQuestion.text" autocomplete="off"
-								placeholder="Question text">
-						</mat-form-field>
-
-
-					</mat-card-content>
-					<mat-card-content *ngIf="editQuestionViewModel.currentQuestion 
-					&& editQuestionViewModel.currentQuestion.childQuestion 
-					&& editQuestionViewModel.currentQuestion.text">
-						<mat-card-subtitle>Child question</mat-card-subtitle>
-
-						<section class="example-section">
-							<mat-radio-group class="d-flex flex-direction--column"
-								[(ngModel)]="editQuestionViewModel.currentQuestion.childQuestion.questionType">
-								<mat-radio-button class="example-margin" color="primary" value="1">
-									True/False question
-								</mat-radio-button>
-								<mat-radio-button class="example-margin" color="accent" value="2">
-									Input question
-								</mat-radio-button>
-							</mat-radio-group>
-						</section>
-						<mat-form-field>
-							<input matInput [(ngModel)]="editQuestionViewModel.currentQuestion.childQuestion.text"
-								placeholder="Child question text">
-						</mat-form-field>
-
-					</mat-card-content>
-					<mat-card-content>
-						<mat-card-actions class="text-right">
-							<button mat-raised-button color="primary" (click)="saveQuestion()">Save</button>
-							<button mat-raised-button color="warn" (click)="onCloseEdit()">Discard</button>
-						</mat-card-actions>
-					</mat-card-content>
-				</mat-card>
-			</div> -->
-			<!-- column -->
-			<!-- <div *ngIf="editQuestionViewModel.addQuestionMode" fxFlex.gt-lg="50" fxFlex.gt-md="50" fxFlex.gt-xs="100"
-				fxFlex="100">
-				<mat-card>
-					<mat-card-content>
-						<mat-card-title>Question editor</mat-card-title>
-						<mat-card-subtitle>Add new question</mat-card-subtitle>
-
-					</mat-card-content>
-					<hr>
-					<mat-card-content>
-						<section class="example-section">
-							<label class="example-margin">Question type:</label>
-							<mat-radio-group [(ngModel)]="editQuestionViewModel.currentQuestion.questionType">
-								<mat-radio-button class="example-margin" color="primary" value="1">
-									True/False
-								</mat-radio-button>
-								<mat-radio-button class="example-margin" color="accent" value="2">
-									Input
-								</mat-radio-button>
-							</mat-radio-group>
-						</section>
-						<mat-form-field>
-							<input matInput [(ngModel)]="editQuestionViewModel.currentQuestion.text"
-								(keyup.enter)="saveNewQuestion()" placeholder="Question text">
-						</mat-form-field>
-						<mat-card-actions class="text-right">
-							<button mat-raised-button color="primary" (click)="saveNewQuestion()">Save</button>
-							<button mat-raised-button color="warn" (click)="onCloseEdit()">Discard</button>
-						</mat-card-actions>
-					</mat-card-content>	
-				</mat-card>
-			</div> -->
 
 			<!-- Results -->
 			<div fxFlex.gt-lg="50" fxFlex.gt-md="50" fxFlex.gt-xs="100" fxFlex="100">
@@ -289,11 +183,50 @@
 	</mat-card-content>
 </mat-card>
 
-<div style="display: flex; place-content: center;"  >
-	<mat-card fxFlex.gt-lg="50" fxFlex.gt-md="50" fxFlex.gt-xs="100" fxFlex="100" >
+<div style="display: flex; place-content: center;">
+
+	<mat-card fxFlex.gt-lg="50" fxFlex.gt-md="50" fxFlex.gt-xs="100" fxFlex="100" class="oh text-center little-profile">
+		<img mat-card-image src="assets/images/background/questions.jpg" alt="Photo of a Shiba Inu">
+		<mat-card-content>
+
+			<h3 class="m-b-0">Quiz</h3>
+			<h6 class="m-t-0 " *ngIf="questionWizardEngine.quizStarted">Quiz started</h6>
+			<h6 class="m-t-0 " *ngIf="questionWizardEngine.quizFinished">Quiz finished</h6>
+			<mat-card-actions>
+				<button mat-raised-button color="primary" (click)="startQuiz()">Start quiz</button>
+			</mat-card-actions>
+			<div fxLayout="row" fxLayoutWrap="wrap" class="m-t-30">
+				<div fxFlex.gt-sm="33.33%" fxFlex.gt-xs="33.33%" fxFlex="100">
+					<h3 class="m-0 font-light">{{questionWizardEngine.questions.length}}</h3>
+					<small>Questions</small>
+				</div>
+				<div fxFlex.gt-sm="33.33%" fxFlex.gt-xs="33.33%" fxFlex="100">
+					<h3 class="m-0 font-light">{{questionWizardEngine.currentIndex + 1}}</h3>
+					<small>Current position</small>
+				</div>
+				<div fxFlex.gt-sm="33.33%" fxFlex.gt-xs="33.33%" fxFlex="100">
+					<h3 class="m-0 font-light">{{questionWizardEngine.currentPoints}}</h3>
+					<small>Current points</small>
+				</div>
+			</div>
+		</mat-card-content>
+	</mat-card>
+
+	<mat-card fxFlex.gt-lg="50" fxFlex.gt-md="50" fxFlex.gt-xs="100" fxFlex="100">
 		<mat-card-content>
 			<mat-card-title>Quiz</mat-card-title>
-
+			<div *ngIf="questionWizardEngine.quizStarted" class="question-wrap">
+				<p>
+					{{questionWizardEngine.currentQuestion.text}}
+				</p>
+				<div *ngIf="questionWizardEngine.currentQuestion.questionType == 1" class="question-answer-button--wrap">
+					<button mat-raised-button color="primary" (click)="trueFalseAnswer(true)">Yes</button>
+					<button mat-raised-button color="primary" (click)="trueFalseAnswer(false)">No</button>
+				</div>
+				<div *ngIf="questionWizardEngine.currentQuestion.questionType == 2">
+					<button mat-raised-button color="primary" (click)="inputAnswer(1)">Next</button>
+				</div>
+			</div>
 		</mat-card-content>
 	</mat-card>
 </div>

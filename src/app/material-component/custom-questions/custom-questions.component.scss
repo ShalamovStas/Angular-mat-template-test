@@ -116,3 +116,16 @@
   }
 }
 
+.question-wrap{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.question-answer-button--wrap{
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+}
+
+
