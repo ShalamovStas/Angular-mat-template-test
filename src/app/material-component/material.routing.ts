@@ -17,8 +17,13 @@ import { SnackbarComponent } from './snackbar/snackbar.component';
 import { SliderComponent } from './slider/slider.component';
 import { SlideToggleComponent } from './slide-toggle/slide-toggle.component';
 import { CustomQuestionsComponent } from './custom-questions/custom-questions.component';
+import { DestinationComponent } from './destination-tab/destination.component';
 
 export const MaterialRoutes: Routes = [
+  {
+    path: 'destination',
+    component: DestinationComponent
+  },
   {
     path: 'custom-questions',
     component: CustomQuestionsComponent

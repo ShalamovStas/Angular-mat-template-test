@@ -3,7 +3,7 @@ export class Question {
   public text: string | undefined;
   public questionType: any = QuestionType.UNDEFINED;
   public questionTrueFalseStrategy: any = TrueFalseQuestionStrategy.UNDEFINED;
-  public childQuestion: Question | undefined;
+  public childQuestion: any;
   public pointsPositive: any = 1;
   public pointsNegative: any = 0;
 
@@ -11,9 +11,6 @@ export class Question {
   public inputAnswer: any;
 
   getAnswerPoint(): number {
-    console.log("getAnswerPoint")
-    console.log(this)
-
     if (this.questionType == QuestionType.TRUE_FALSE_QUESTION) {
       if (this.answerTrueFalse == AnswerTrueFalse.TRUE)
         return this.pointsPositive;
@@ -22,7 +19,7 @@ export class Question {
     }
 
     if (this.questionType == QuestionType.INPUT_QUESTION) {
-      return 0;
+      return this.pointsPositive;
     }
 
     return 0;

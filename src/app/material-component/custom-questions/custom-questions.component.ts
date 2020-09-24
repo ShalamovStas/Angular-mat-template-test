@@ -339,6 +339,7 @@ export class CustomQuestionsComponent implements OnInit {
   //quiz
 
   startQuiz() {
+    this.questionWizardEngine.init(this.questions, this.testResultModels);
     this.questionWizardEngine.setStateStart();
     console.log(this.questions)
   }

@@ -37,6 +37,8 @@ import { SnackbarComponent } from './snackbar/snackbar.component';
 import { SliderComponent } from './slider/slider.component';
 import { SlideToggleComponent } from './slide-toggle/slide-toggle.component';
 import { MatFormFieldModule, MatInputModule } from '@angular/material';
+import { DestinationComponent } from './destination-tab/destination.component';
+import { PresentSimpleComponent } from './destination-tab/present-simple/present-simple.component';
 @NgModule({
   imports: [
     MatFormFieldModule,
@@ -56,6 +58,8 @@ import { MatFormFieldModule, MatInputModule } from '@angular/material';
     DialogEditTestResultModelComponent],
   declarations: [
     CustomQuestionsComponent,
+    DestinationComponent,
+    PresentSimpleComponent,
     DialogEditPolicyComponent,
     DialogAddQuestionComponent,
     DialogEditTestResultModelComponent,

@@ -34,13 +34,18 @@
 												</h6>
 											</div>
 											<div class="question-attributes--wrap">
-												<h6 class="text-info m-0">
+												<h6 *ngIf="question.questionType != 2" class="text-info m-0">
 													<i class="mdi mdi-checkbox-blank-circle font-10 m-r-10 "></i>
 													Positive points: {{question.pointsPositive}}
 												</h6>
-												<h6 class="text-info m-0">
+												<h6 *ngIf="question.questionType != 2" class="text-info m-0">
 													<i class="mdi mdi-checkbox-blank-circle font-10 m-r-10 "></i>
 													Negative points: {{question.pointsNegative}}
+												</h6>
+
+												<h6 *ngIf="question.questionType == 2" class="text-info m-0">
+													<i class="mdi mdi-checkbox-blank-circle font-10 m-r-10 "></i>
+													Points: {{question.pointsPositive}}
 												</h6>
 											</div>
 											<span>{{question.text}}</span>
@@ -190,8 +195,8 @@
 		<mat-card-content>
 
 			<h3 class="m-b-0">Quiz</h3>
-			<h6 class="m-t-0 " *ngIf="questionWizardEngine.quizStarted">Quiz started</h6>
-			<h6 class="m-t-0 " *ngIf="questionWizardEngine.quizFinished">Quiz finished</h6>
+			<h6 class="m-t-0 " *ngIf="questionWizardEngine.state == 'STARTED'">Quiz started</h6>
+			<h6 class="m-t-0 " *ngIf="questionWizardEngine.state == 'FINISHED'">Quiz finished</h6>
 			<mat-card-actions>
 				<button mat-raised-button color="primary" (click)="startQuiz()">Start quiz</button>
 			</mat-card-actions>
@@ -215,17 +220,28 @@
 	<mat-card fxFlex.gt-lg="50" fxFlex.gt-md="50" fxFlex.gt-xs="100" fxFlex="100">
 		<mat-card-content>
 			<mat-card-title>Quiz</mat-card-title>
-			<div *ngIf="questionWizardEngine.quizStarted" class="question-wrap">
+			<div *ngIf="questionWizardEngine.state == 'STARTED'" class="question-wrap">
 				<p>
 					{{questionWizardEngine.currentQuestion.text}}
 				</p>
-				<div *ngIf="questionWizardEngine.currentQuestion.questionType == 1" class="question-answer-button--wrap">
+				<div *ngIf="questionWizardEngine.currentQuestion.questionType == 1"
+					class="question-answer-button--wrap">
 					<button mat-raised-button color="primary" (click)="trueFalseAnswer(true)">Yes</button>
 					<button mat-raised-button color="primary" (click)="trueFalseAnswer(false)">No</button>
 				</div>
 				<div *ngIf="questionWizardEngine.currentQuestion.questionType == 2">
 					<button mat-raised-button color="primary" (click)="inputAnswer(1)">Next</button>
 				</div>
+			</div>
+
+			<div *ngIf="questionWizardEngine.state == 'FINISHED'" class="question-wrap">
+				<p>
+					{{questionWizardEngine.currentTestResult.message}}
+				</p>
+				<p>
+					Points: {{questionWizardEngine.currentTestResult.points}}
+				</p>
+
 			</div>
 		</mat-card-content>
 	</mat-card>

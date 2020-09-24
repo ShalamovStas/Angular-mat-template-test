@@ -1,25 +1,26 @@
-import { Question, TestResultModel } from './questionModels'
+import { Question, TestResultModel, TrueFalseQuestionStrategy, AnswerTrueFalse } from './questionModels'
+
+export enum QuestionWizardEngineState {
+    STARTED = 'STARTED',
+    FINISHED = 'FINISHED',
+    IS_READY = 'IS_READY'
+}
 
 
 export class QuestionWizardEngine {
 
     public questions: Array<Question> = new Array<Question>();
-    public testResultModels: Array<TestResultModel> =  new Array<TestResultModel>();;
-    public sequenceEngine: SequenceEngine<Question> =  new SequenceEngine;
+    public testResultModels: Array<TestResultModel> = new Array<TestResultModel>();;
+    public sequenceEngine: SequenceEngine<Question> = new SequenceEngine;
 
-    public quizStarted: boolean = false; 
-    public quizFinished: boolean = true; 
-    public currentQuestion: Question = new Question; 
-    public currentIndex: number = 0; 
-    public currentPoints: number = 0; 
+    public state: QuestionWizardEngineState = QuestionWizardEngineState.IS_READY;
+    public currentQuestion: Question = new Question;
+    public currentIndex: number = 0;
+    public currentPoints: number = 0;
 
-    // constructor(questions: Array<Question>, testResultModels: Array<TestResultModel>, sequenceEngine: SequenceEngine<Question>) {
-    //     this.questions = questions;
-    //     this.testResultModels = testResultModels;
-    //     this.sequenceEngine = sequenceEngine;
-    // }
+    public currentTestResult: TestResultModel | undefined;
 
-    init(questions: Array<Question>, testResultModels: Array<TestResultModel>){
+    init(questions: Array<Question>, testResultModels: Array<TestResultModel>) {
         this.questions = questions;
         this.testResultModels = testResultModels;
         this.sequenceEngine = new SequenceEngine();
@@ -34,37 +35,81 @@ export class QuestionWizardEngine {
         this.currentIndex = 0;
         this.currentPoints = 0;
 
-        this.quizStarted = true;
-        this.quizFinished = false;
+        this.state = QuestionWizardEngineState.STARTED;
         this.currentQuestion = this.questions[this.sequenceEngine.index];
+
+        this.currentTestResult = undefined;
     }
 
     next() {
         console.log(this.sequenceEngine.isFinished())
-        if (this.sequenceEngine.isFinished()){
+        if (this.sequenceEngine.isFinished()) {
             return;
         }
-
-        
         this.calcPoints()
+
+        let childQuestionPolicy = this.checkChildQuestion(this.currentQuestion);
+        if (childQuestionPolicy.showChild) {
+            this.currentQuestion = this.questions[this.sequenceEngine.index].childQuestion;
+            return;
+        }
+
+
         this.sequenceEngine.next();
-        this.checkPolicy();
-        this.currentQuestion =  this.questions[this.sequenceEngine.index];
+        this.currentQuestion = this.questions[this.sequenceEngine.index];
         this.currentIndex = this.sequenceEngine.index;
-        
-        if (this.sequenceEngine.isFinished()){
-            this.quizStarted = false;
-            this.quizFinished = true;
+
+        if (this.sequenceEngine.isFinished()) {
+            this.state = QuestionWizardEngineState.FINISHED;
+
+            this.handleTestResult();
             return;
         }
     }
 
-    calcPoints(){
-        console.log("calcPoints")
-        this.currentPoints += this.currentQuestion.getAnswerPoint();
+    calcPoints() {
+        if (this.currentQuestion)
+            this.currentPoints += this.currentQuestion.getAnswerPoint();
+        else {
+            throw "CurrentQuestion is undefined";
+        }
     }
 
-    private checkPolicy(){
+    private checkChildQuestion(question: Question): any {
+        let result = { showChild: false }
+
+        if (!question.childQuestion)
+            return result;
+
+        if (question.childQuestion.questionTrueFalseStrategy == TrueFalseQuestionStrategy.SHOW_CHILD_IF_PARENT_IS_TRUE) {
+            let parentAnswer = question.answerTrueFalse;
+            if (parentAnswer == AnswerTrueFalse.TRUE) {
+                result.showChild = true;
+            } else {
+                result.showChild = false;
+            }
+        }
+
+        if (question.childQuestion.questionTrueFalseStrategy == TrueFalseQuestionStrategy.SKIP_CHILD_IF_PARENT_IS_TRUE) {
+            let parentAnswer = question.answerTrueFalse;
+            if (parentAnswer == AnswerTrueFalse.TRUE)
+                result.showChild = false;
+            else
+                result.showChild = true;
+        }
+
+        return result;
+    }
+
+    handleTestResult() {
+        this.currentTestResult = this.testResultModels.find(x => { return x.points == this.currentPoints });
+
+        if (!this.currentTestResult) {
+            this.currentTestResult = new TestResultModel();
+            this.currentTestResult.message = "You haven`t specified this result!";
+            this.currentTestResult.points = this.currentPoints;
+        }
+
     }
 }
 
